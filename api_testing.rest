@@ -1,0 +1,19 @@
+### SignUp post
+POST http://localhost:5010/api/signup
+Content-Type: application/json
+
+{
+    "firstName" : "Arunkumar",
+    "lastName" : "Murugesan",
+    "email" : "arunworkacc0@gmail.com",
+    "password" : "whateverr"
+}
+
+### SignIn post
+POST http://localhost:5010/api/signin
+Content-Type: application/json
+
+{
+    "email" : "arunworkacc0@gmail.com",
+    "password" : "whateverr"
+}
