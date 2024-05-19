@@ -6,7 +6,7 @@ import {
     isRequestValidated,
     validateSignUpRequest,
     validateSignInRequest,
-  } from "../middleware/validator";
+  } from "../middleware/auth.validator";
 
 
 const router : Router = express.Router();
@@ -20,4 +20,4 @@ router.route("/signin").post(validateSignInRequest, isRequestValidated, signIn);
 router.route("/signup").post(validateSignUpRequest, isRequestValidated, signUp);
 
 
-module.exports = router;
+export default router;
