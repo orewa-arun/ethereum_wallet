@@ -1,12 +1,13 @@
 import 'dotenv/config';
 import * as bip39 from 'bip39';
 import { hdkey } from 'ethereumjs-wallet';
+import {wallet_mnemonic} from "./config/wallet.config";
 
 class Wallet{
     mnemonic : string;
 
     constructor() {
-        this.mnemonic = process.env.MNEMONIC as string;
+        this.mnemonic = wallet_mnemonic as string;
       }
     
     async getEthereumAddress(index: number): Promise<string> {

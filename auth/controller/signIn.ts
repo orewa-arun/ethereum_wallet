@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import User from "../models/user.model";
 import jwt from "jsonwebtoken";
+import { jwt_secret } from "../config/auth.config";
 
 export const signIn = async (req : Request, res : Response) : Promise<void> => {
 
@@ -23,7 +24,7 @@ export const signIn = async (req : Request, res : Response) : Promise<void> => {
             if(isPasswordValid){
                 const token = jwt.sign(
                     {_id : user._id, role: user.role }, // payload can be any object
-                    process.env.JWT_SECRET as string,
+                    jwt_secret as string,
                     {expiresIn : "2d"}
                 );
     

@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import connectDB from "./connect_mongo";
 import router from "./auth/routes/auth.routes";
+import { mongo_path } from "./mongo.config";
 
 const app: Express = express();
 app.use(cors());
@@ -14,7 +15,7 @@ const port = process.env.PORT || 5010;
 
 const start = async (): Promise<void> => {
   try {
-    const mongoUrl = process.env.MONGO_PATH;
+    const mongoUrl = mongo_path;
     if (!mongoUrl) {
       throw new Error("MONGO_PATH is not defined in environment variables");
     }
