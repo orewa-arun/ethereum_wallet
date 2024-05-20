@@ -17,3 +17,7 @@ Content-Type: application/json
     "email" : "arunworkacc0@gmail.com",
     "password" : "whateverr"
 }
+
+### authenticate token
+GET http://localhost:5010/api/protected
+x-access-token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjRhMjZmM2U0NzQxZDgyNGIxNDIwNTgiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNjE5Mjc2MSwiZXhwIjoxNzE2MzY1NTYxfQ.aCfQl_oaPloJtMf-P-NupbgqNmgQmbd0uUqEY25e7XM
