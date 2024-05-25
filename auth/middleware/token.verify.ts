@@ -20,6 +20,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         }
         // console.log("token verified!, user is : ", decodedToken);
         req.user = decodedToken as JwtPayload; // store the decoded token in the req object
+        res.status(StatusCodes.OK).json({ message : "authorised!" });
         next();
     });
 };

@@ -1,15 +1,6 @@
-import express, { Express } from "express";
-import "dotenv/config";
-import cors from "cors";
-import connectDB from "./connect_mongo";
-import router from "./auth/routes/auth.routes";
 import { mongo_path } from "./mongo.config";
-
-const app: Express = express();
-app.use(cors());
-app.use(express.json());
-
-app.use("/api", router);
+import connectDB from "./connect_mongo";
+import app from "./app";
 
 const port = process.env.PORT || 5010;
 
