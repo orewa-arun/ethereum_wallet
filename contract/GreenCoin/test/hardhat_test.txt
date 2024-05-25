@@ -1,0 +1,72 @@
+import {
+    loadFixture,
+  } from "@nomicfoundation/hardhat-toolbox/network-helpers";
+  import { expect } from "chai";
+  import hre from "hardhat";
+
+  describe("GreenCoin" , function(){
+
+    // fixture function, it denotes the state we would need to test rest of the blockchain
+    async function deployGreenCoin() {
+        const coin_id = 1000;
+
+        const [owner, otherAccount] = await hre.ethers.getSigners();
+
+        // deployed from owner
+        const Coin =  await hre.ethers.getContractFactory("GreenCoin" , owner);
+        const coin = await Coin.deploy(coin_id);
+
+        const hash : string = "0x524c62d7dff4d4d8c92095b60db94b8bb583d0f64b8cf5f1e3dc68e67d184229";
+
+        await coin.connect(otherAccount).addValidation(hash); 
+
+        return {coin, owner, otherAccount, coin_id, hash};
+      }
+
+      describe("Deployment", function () {
+    
+        it("Should have the same coin id", async function () {
+            // Loads the fixture state
+            const { coin_id, coin } = await loadFixture(
+                deployGreenCoin
+            );
+        
+            expect(await coin.coinId()).to.equal(
+                coin_id
+            );
+        });
+      });
+
+      describe("Adding validation", function () {
+    
+        it("Should have validator address and data hash", async function () {
+            // Loads the fixture state
+            const {otherAccount, coin, hash } = await loadFixture(
+                deployGreenCoin
+            );
+
+            const validation = await coin.validations(0);
+
+            const validator = validation.validator;
+            const data_hash = validation.data_hash;
+        
+            expect(validator).to.equal(
+                otherAccount
+            );
+            expect(data_hash).to.equal(
+                hash
+            );
+        });
+
+        it("Should have validation score 1", async function(){
+            const {coin} = await loadFixture(
+                deployGreenCoin
+            );
+
+            const validation_score = await coin.validation_score();
+
+            expect(validation_score).to.equal(1);
+        })
+      });
+
+  })
