@@ -31,32 +31,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const bip39 = __importStar(require("bip39"));
-const ethereumjs_wallet_1 = require("ethereumjs-wallet");
-const wallet_config_1 = require("./config/wallet.config");
-class Wallet {
-    constructor() {
-        this.mnemonic = wallet_config_1.wallet_mnemonic;
-    }
-    getEthereumAddress(index) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Generate the seed from the mnemonic
-            const seed = yield bip39.mnemonicToSeed(this.mnemonic);
-            // Create an HD wallet from the seed
-            const hdWallet = ethereumjs_wallet_1.hdkey.fromMasterSeed(seed);
-            // Derive the path for Ethereum (m/44'/60'/0'/0/index)
-            const path = `m/44'/60'/0'/0/${index}`;
-            const wallet = hdWallet.derivePath(path).getWallet();
-            // Get the Ethereum address
-            const address = wallet.getAddressString();
-            return address;
-        });
-    }
-}
-const wallet = new Wallet();
-wallet.getEthereumAddress(0).then((address) => {
-    console.log('Ethereum Address:', address);
+const mongoose_1 = __importStar(require("mongoose"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const userSchema = new mongoose_1.Schema({
+    firstName: {
+        type: String,
+        require: true,
+        trim: true,
+        min: 3,
+        max: 20
+    },
+    lastName: {
+        type: String,
+        require: true,
+        trim: true,
+        min: 3,
+        max: 20
+    },
+    username: {
+        type: String,
+        require: true,
+        trim: true,
+        unique: true,
+        lowercase: true,
+        index: true,
+    },
+    email: {
+        type: String,
+        require: true,
+        trim: true,
+        unique: true,
+        lowercase: true,
+    },
+    hash_password: {
+        type: String,
+        require: true,
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user",
+    },
+    contactNumber: {
+        type: String,
+    },
+    profilePicture: {
+        type: String,
+    },
+}, { timestamps: true });
+//For get fullName from when we get data from database
+userSchema.virtual("fullName").get(function () {
+    return `${this.firstName} ${this.lastName}`;
 });
-exports.default = wallet;
+// authenticate password function in the "Schema class"
+userSchema.methods.authenticate = function (password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return bcryptjs_1.default.compare(password, this.hash_password);
+    });
+};
+// Create and export the User model
+const User = mongoose_1.default.model("User", userSchema);
+exports.default = User;
